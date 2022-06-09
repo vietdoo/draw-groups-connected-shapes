@@ -1,9 +1,9 @@
-﻿#include "Class_Declare.h"
+#include "Class_Declare.h"
 #include "framework.h"
 #include "Project8.h"
 #define PI 3.14159265
 
-
+//200 200 300 100 500 200 400 400 200 300
 
 /* CPoint method definition */
 ostream& operator<<(ostream& outDevice, const CPoint& p)
@@ -247,11 +247,14 @@ float CElipse::getArea()
 
 bool CElipse::IsInside(CPoint pcheck)
 {
-
 	// General form: A*(x - a) + B*(y - b) = R 
 	// CElipse form: Rb^2*(x - a)^2 + Ra^2(y - b)^2 = Ra^2*Rb^2
 	// Check A*(x - a) + B*(y - b) <= 1 with pcheck(x, y)
-	return (1/(VQuadraEqua[0].A* VQuadraEqua[0].A) * (pcheck.getX() - VQuadraEqua[0].a)* (pcheck.getX() - VQuadraEqua[0].a) + 1/(VQuadraEqua[0].B* VQuadraEqua[0].B) * (pcheck.getY() - VQuadraEqua[0].b)* (pcheck.getY() - VQuadraEqua[0].b)) <= 1;
+	int ra2 = VQuadraEqua[0].A * VQuadraEqua[0].A;
+	int x = (pcheck.getX() - VQuadraEqua[0].a) * (pcheck.getX() - VQuadraEqua[0].a);
+	int rb2 = VQuadraEqua[0].B * VQuadraEqua[0].B;
+	int y = (pcheck.getY() - VQuadraEqua[0].b) * (pcheck.getY() - VQuadraEqua[0].b);
+	return x / ra2 + y / rb2 <= 1;
 }
 
 

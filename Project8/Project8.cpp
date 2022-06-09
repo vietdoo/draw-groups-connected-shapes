@@ -195,6 +195,7 @@ set<int> checkBelong() {
         if (!ok) {
             if (f[n - 1]->IsInside(f[i]->getCentroid()) || f[i]->IsInside(f[n - 1]->getCentroid())) {
                 belong.insert(i);
+                cout << "\nInside " << i << endl;
             }
         }
     }
@@ -319,12 +320,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             return 0;
         }
         SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-       //// FILE* stream;
-       // freopen_s(&stream, "QQlogs.txt", "w", stdout);
+        FILE* stream;
+        freopen_s(&stream, "QQlogs.txt", "w", stdout);
         int n = f.size();
         set <int> belong = checkBelong();
 
-        cout << "NUM BELONG: " << belong.size() << "";
+        cout << "BELONG: ";
+        for (auto i : belong) {
+            cout << i << ' ';
+        }
         groupShape(belong);
         cout << "\nGROUP SIZE: " << group.size();
 
@@ -367,7 +371,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         //
         cout << endl;
 
-     //   fclose(stdout);
+        fclose(stdout);
 
         for (int i = 0; i < f.size(); i++) {
             SelectObject(hdc, CreateHatchBrush(HS_API_MAX, RGB(255, 0, 250)));

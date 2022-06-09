@@ -21,7 +21,7 @@ using namespace z3;
 class CPoint
 {
 private:
-	
+
 public:
 	int x, y;
 	CPoint(int a = 0, int b = 0);
@@ -176,7 +176,7 @@ class CPolygon : public Figure
 protected:
 	vector<CPoint> VCPoint;
 	vector<LinearEquationIn2Var> VEqua;
-	
+
 public:
 	//CPolygon() {};
 	CPolygon(vector<CPoint> vCPoint);
