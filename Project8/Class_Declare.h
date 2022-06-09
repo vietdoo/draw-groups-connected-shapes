@@ -105,7 +105,6 @@ protected:
 public:
 	CElipse(CPoint center = CPoint(0, 0), int a = 0, int b = 0);
 	void setCElipse(CPoint center = CPoint(0, 0), int a = 0, int b = 0);
-	operator QuadraticEquationIn2Var();
 	virtual void draw(HDC hdc);
 	virtual void fill(HDC hdc, int R, int G, int B);
 	virtual CPoint getCentroid();

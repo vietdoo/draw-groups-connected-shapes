@@ -114,24 +114,39 @@ bool CheckSolution(const QuadraticEquationIn2Var Equa_1, const QuadraticEquation
 
 	solver s(c);
 	// General form: A*(x - a) + B*(y - b) = R 
-	// CElipse form: Rb^2*(x - a)^2 + Ra^2(y - b)^2 = Ra^2*Rb^2
-	// Linear form: A*(x - a) + B*(y - b) = 0
+	// General form: A*(x - a) + B*(y - b) = R 
+	// CElipse form: (x - a)*(x - a)/Ra*Ra + (y - b)*(y - b)/Rb*Rb = 1 // limit = 3
+	if (Equa_1.Limit == 3 and Equa_2.Limit == 3) {
+		s.add((x - Equa_1.a) * (x - Equa_1.a) / (Equa_1.A * Equa_1.A) + (y - Equa_1.b) * (y - Equa_1.b) / (Equa_1.B * Equa_1.B) == 1);
+		s.add((x - Equa_2.a) * (x - Equa_2.a) / (Equa_2.A * Equa_2.A) + (y - Equa_2.b) * (y - Equa_2.b) / (Equa_2.B * Equa_2.B) == 1);
+	}
+	else if (Equa_1.Limit == 3) {
+		s.add((x - Equa_1.a) * (x - Equa_1.a) / (Equa_1.A * Equa_1.A) + (y - Equa_1.b) * (y - Equa_1.b) / (Equa_1.B * Equa_1.B) == 1);
+		s.add(Equa_2.A * (x - Equa_2.a) * (x - Equa_2.a) + Equa_2.B * (y - Equa_2.b) * (y - Equa_2.b) == Equa_2.R);
+	}
+	else if(Equa_2.Limit == 3) {
+		s.add((x - Equa_2.a) * (x - Equa_2.a) / (Equa_2.A * Equa_2.A) + (y - Equa_2.b) * (y - Equa_2.b) / (Equa_2.B * Equa_2.B) == 1);
+		s.add(Equa_1.A * (x - Equa_1.a) * (x - Equa_1.a) + Equa_1.B * (y - Equa_1.b) * (y - Equa_1.b) == Equa_1.R);
+	}
+	else {
+		s.add(Equa_1.A * (x - Equa_1.a) * (x - Equa_1.a) + Equa_1.B * (y - Equa_1.b) * (y - Equa_1.b) == Equa_1.R);
+		s.add(Equa_2.A * (x - Equa_2.a) * (x - Equa_2.a) + Equa_2.B * (y - Equa_2.b) * (y - Equa_2.b) == Equa_2.R);
+	}
 
-	s.add(Equa_1.A * (x - Equa_1.a) * (x - Equa_1.a) + Equa_1.B * (y - Equa_1.b) * (y - Equa_1.b) == Equa_1.R);
-	s.add(Equa_2.A * (x - Equa_2.a) * (x - Equa_2.a) + Equa_2.B * (y - Equa_2.b) * (y - Equa_2.b) == Equa_2.R);
+	
 
 	// case semi CCircle1
 	if (Equa_1.Limit != 0)
 		if (Equa_1.Limit == 1)
 			s.add(y <= Equa_1.b);
-		else
+		else if (Equa_1.Limit == -1)
 			s.add(y >= Equa_1.b);
 
 	// case semi cirlce 2
 	if (Equa_2.Limit != 0)
 		if (Equa_2.Limit == 1)
 			s.add(y <= Equa_2.b);
-		else
+		else if(Equa_2.Limit == -1)
 			s.add(y >= Equa_2.b);
 
 	if (!s.check())
@@ -152,9 +167,13 @@ bool CheckSolution(const LinearEquationIn2Var Equa_1, const QuadraticEquationIn2
 	expr y = c.real_const("y");
 	solver s(c);
 	// General form: A*(x - a) + B*(y - b) = R 
-	// CElipse form: Rb^2*(x - a)^2 + Ra^2(y - b)^2 = Ra^2*Rb^2
+	// CElipse form: (x - a)*(x - a)/Ra*Ra + (y - b)*(y - b)/Rb*Rb = 1 // limit = 3
+	// Linear form: A*(x - a) + B*(y - b) = 0
 	s.add(Equa_1.A * (x - Equa_1.a) + Equa_1.B * (y - Equa_1.b) == 0);
-	s.add(Equa_2.A * (x - Equa_2.a) * (x - Equa_2.a) + Equa_2.B * (y - Equa_2.b) * (y - Equa_2.b) == Equa_2.R);
+	if(Equa_2.Limit == 3)
+		s.add((x - Equa_2.a) * (x - Equa_2.a)/(Equa_2.A* Equa_2.A) + (y - Equa_2.b) * (y - Equa_2.b)/(Equa_2.B* Equa_2.B) == 1);
+	else
+		s.add(Equa_2.A * (x - Equa_2.a) * (x - Equa_2.a) + Equa_2.B * (y - Equa_2.b) * (y - Equa_2.b) == Equa_2.R);
 
 	s.add(x >= Equa_1.xlim_l && x <= Equa_1.xlim_r);
 	s.add(y >= Equa_1.ylim_d && y <= Equa_1.ylim_u);
@@ -163,12 +182,11 @@ bool CheckSolution(const LinearEquationIn2Var Equa_1, const QuadraticEquationIn2
 		if (Equa_2.Limit == 1) {
 			s.add(y <= Equa_2.b);
 		}		
-		else {
+		else if (Equa_2.Limit == -1) {
 			//s.add(y <= Equa_2.b);
 			s.add(y >= Equa_2.b);
 		} 
 			
-
 	if (!s.check())
 		return false;
 	else
@@ -190,25 +208,23 @@ CElipse::CElipse(CPoint center, int a, int b)
 
 void CElipse::setCElipse(CPoint center, int a, int b)
 {
+	// General form: A*(x - a) + B*(y - b) = R 
+	// CElipse form: (x - a)*(x - a)/Ra*Ra + (y - b)*(y - b)/Rb*Rb = 1 // limit = 3
+	// Linear form: A*(x - a) + B*(y - b) = 0
+	VQuadraEqua.resize(0);
 	QuadraticEquationIn2Var Equation;
 	Center = center;
 	Ra = a;		Rb = b;
-	Equation.A = Rb * Rb;		Equation.a = Center.getX();
-	Equation.B = Ra * Ra;		Equation.b = Center.getY();		Equation.R = Ra * Ra * Rb * Rb;
+	Equation.A = Ra;		Equation.a = Center.getX();		Equation.Limit = 3;
+	Equation.B = Rb;		Equation.b = Center.getY();		Equation.R = 1;
 	VQuadraEqua.push_back(Equation);
 }
 
 
-CElipse::operator QuadraticEquationIn2Var()
-{
-	// General form: A*(x - a) + B*(y - b) = R 
-	// CElipse form: (1/Ra^2)*(x-a) + (1/Rb^2)*(y-b) = 1
-	return QuadraticEquationIn2Var(Rb * Rb, Center.getX(), Ra * Ra, Center.getY(), Ra * Ra * Rb * Rb);
-}
 
 void CElipse::draw(HDC hdc)
 {
-	Ellipse(hdc, Center.getX() - Ra, Center.getY() + Rb, Center.getX() + Ra, Center.getY() - Rb);
+	Ellipse(hdc, Center.getX() - Ra, Center.getY() - Rb, Center.getX() + Ra, Center.getY() + Rb);
 }
 
 void CElipse::fill(HDC hdc, int R, int G, int B)
@@ -235,8 +251,7 @@ bool CElipse::IsInside(CPoint pcheck)
 	// General form: A*(x - a) + B*(y - b) = R 
 	// CElipse form: Rb^2*(x - a)^2 + Ra^2(y - b)^2 = Ra^2*Rb^2
 	// Check A*(x - a) + B*(y - b) <= 1 with pcheck(x, y)
-	return (VQuadraEqua[0].A * pow(pcheck.getX() - VQuadraEqua[0].a, 2) + VQuadraEqua[0].B * pow(pcheck.getY() - VQuadraEqua[0].b, 2)) <= VQuadraEqua[0].R;
-	
+	return (1/(VQuadraEqua[0].A* VQuadraEqua[0].A) * (pcheck.getX() - VQuadraEqua[0].a)* (pcheck.getX() - VQuadraEqua[0].a) + 1/(VQuadraEqua[0].B* VQuadraEqua[0].B) * (pcheck.getY() - VQuadraEqua[0].b)* (pcheck.getY() - VQuadraEqua[0].b)) <= 1;
 }
 
 
@@ -249,6 +264,7 @@ CCircle::CCircle(CPoint center, int r, int lim) : CElipse(center, r, r)
 	
 
 }
+
 void CCircle::setCCircle(CPoint center, int r, int lim)
 {
 	VQuadraEqua.resize(0);
@@ -413,7 +429,7 @@ CSquare::CSquare(CPoint LUpper, CPoint RLower) :CRectangle(LUpper, RLower) {}
 void CSquare::setCSquare(CPoint LUpper, CPoint RLower) {
 	CRectangle::setCRectangle(LUpper, RLower);
 }
-
+	
 
 
 
