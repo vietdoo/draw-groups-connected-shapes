@@ -1,3 +1,2 @@
-BELONG: 0 1 2 
-Merge groups: 1 To Group << 0
-GROUP SIZE: 3
+BELONG: 
+GROUP SIZE: 1

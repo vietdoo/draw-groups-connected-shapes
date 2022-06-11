@@ -41,6 +41,7 @@ INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 // MY VIETDOO FUNC:
 void addMenu(HWND hWnd);
 set<int> checkBelong();
+bool isNum(TCHAR p[]);
 
 INT_PTR CALLBACK InputHinhVuong(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK InputHinhChuNhat(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -64,7 +65,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     // TODO: Place code here.
     //Gan text cho WCHAR
     // 
-    
+    FILE* stream;
+    freopen_s(&stream, "QQ_Input_Log.txt", "w", stdout);
+    cout << "USER INPUT LOG\n\n";
+    fclose(stdout);
 
     // LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_PROJECT8, szWindowClass, MAX_LOADSTRING);
@@ -131,15 +135,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 
 HMENU hMenu;
-vector <int> path[MAXSHAPE];
-bool visit[MAXSHAPE] = { 0 };
 vector <vector<int>> group;
 int colorR[MAXSHAPE] = { 0 }, colorG[MAXSHAPE] = { 0 }, colorB[MAXSHAPE] = { 0 };
 
 set<int> checkBelong() {
     int n = f.size();
     set<int> belong;
-
     for (int i = 0; i < n - 1; i++) {
         bool ok = 0;
         for (auto u : f[n - 1]->VLinearEqua) {
@@ -247,6 +248,15 @@ void groupShape(set <int> belong) {
         cout << "To Group << " << sGroup[sGroup.size() - 1];
     }
 }
+void debugLog();
+void debugLog() {
+    FILE* stream;
+    freopen_s(&stream, "QQ_Input_Log.txt", "a", stdout);
+    wstring test(&poly[0]);
+    string s(test.begin(), test.end());
+    cout << ix1 << ' ' << iy1 << ' ' << ix2 << ' ' << iy2 << ' ' << ix3 << ' ' << iy3 << ' ' << s << '\n';
+    fclose(stdout);
+}
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -315,6 +325,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
       
         hdc = BeginPaint(hWnd, &ps);
+
+        debugLog();
+
+
         if (!f.size()) {
             EndPaint(hWnd, &ps);
             return 0;
@@ -341,7 +355,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             for (auto shape : group[i]) {
                 sum += f[shape]->getArea();
             }
-
             groupArea.push_back(sum);
             string num = to_string(sum);
             string ss = "";
@@ -381,6 +394,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
 
         for (int i = 0; i < group.size(); i++) {
+
             CPoint P = f[group[i][0]]->getCentroid();
             int x = P.getX();
             int y = P.getY();
@@ -406,7 +420,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-
+bool isNum(TCHAR p[]) {
+    wstring test(&p[0]);
+    string s(test.begin(), test.end());
+    if (s[0] == '-') {
+        if (s.length() >= 2) {
+            if (s[1] < '0' || s[1] > '9') {
+                return 0;
+            }
+        }
+        else {
+            return 0;
+        }
+    }
+    int d = (s[0] == '-');
+    for (int i = d; i < s.length(); i++) {
+        if (s[i] < '0' || s[i] > '9') {
+            return 0;
+        }
+    }
+    return 1;
+}
 
 // Message handler for about box.
 INT_PTR CALLBACK InputHinhVuong(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -420,16 +454,25 @@ INT_PTR CALLBACK InputHinhVuong(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
+            bool ok = 1;
             ICheck = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
+            if (!isNum(px1))
+                ok = 0;
             ix1 = _ttoi(px1);
             GetDlgItemText(hDlg, IDC_EDIT2, py1, 30 - 1);
+            if (!isNum(py1))
+                ok = 0;
             iy1 = _ttoi(py1);
             GetDlgItemText(hDlg, IDC_EDIT3, px2, 30 - 1);
+            if (!isNum(px2))
+                ok = 0;
             ix2 = _ttoi(px2);
             GetDlgItemText(hDlg, IDC_EDIT4, py2, 30 - 1);
+            if (!isNum(py2))
+                ok = 0;
             iy2 = _ttoi(py2);
-            if (ix1 < ix2 and iy1 < iy2 and abs(ix1 - ix2) == abs(iy1 - iy2)) {
+            if (ok and ix1 < ix2 and iy1 < iy2 and abs(ix1 - ix2) == abs(iy1 - iy2)) {
                 Figure* FF = new CRectangle(CPoint(ix1, iy1), CPoint(ix2, iy2));
                 f.push_back(FF);
             }
@@ -458,15 +501,28 @@ INT_PTR CALLBACK InputHinhChuNhat(HWND hDlg, UINT message, WPARAM wParam, LPARAM
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
             ICheck = 1;
+            bool ok = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
+            if (!isNum(px1))
+                ok = 0;
             ix1 = _ttoi(px1);
+
             GetDlgItemText(hDlg, IDC_EDIT2, py1, 30 - 1);
+            if (!isNum(py1))
+                ok = 0;
             iy1 = _ttoi(py1);
+
             GetDlgItemText(hDlg, IDC_EDIT3, px2, 30 - 1);
+            if (!isNum(px2))
+                ok = 0;
             ix2 = _ttoi(px2);
+
             GetDlgItemText(hDlg, IDC_EDIT4, py2, 30 - 1);
+            if (!isNum(py2))
+                ok = 0;
             iy2 = _ttoi(py2);
-            if (ix1 < ix2 and iy1 < iy2) {
+
+            if (ok and ix1 < ix2 and iy1 < iy2) {
                 Figure* FF = new CRectangle(CPoint(ix1, iy1), CPoint(ix2, iy2));
                 f.push_back(FF);
                
@@ -496,17 +552,29 @@ INT_PTR CALLBACK InputHinhTamGiac(HWND hDlg, UINT message, WPARAM wParam, LPARAM
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
             ICheck = 1;
+            bool ok = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
+            if (!isNum(px1))
+                ok = 0;
             ix1 = _ttoi(px1);
             GetDlgItemText(hDlg, IDC_EDIT2, py1, 30 - 1);
+            if (!isNum(py1))
+                ok = 0;
             iy1 = _ttoi(py1);
             GetDlgItemText(hDlg, IDC_EDIT3, px2, 30 - 1);
+            if (!isNum(px2))
+                ok = 0;
             ix2 = _ttoi(px2);
             GetDlgItemText(hDlg, IDC_EDIT4, py2, 30 - 1);
-            iy2 = _ttoi(py2);
+            if (!isNum(py2))
+                ok = 0;
             GetDlgItemText(hDlg, IDC_EDIT5, px3, 30 - 1);
+            if (!isNum(px3))
+            ok = 0;
             ix3 = _ttoi(px3);
             GetDlgItemText(hDlg, IDC_EDIT6, py3, 30 - 1);
+            if (!isNum(py3))
+            ok = 0;
             iy3 = _ttoi(py3);
             vector <CPoint> V;
             V.push_back(CPoint(ix1, iy1));
@@ -544,17 +612,30 @@ INT_PTR CALLBACK InputHinhTron(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
+            bool ok = 1;
             ICheck = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
+            if (!isNum(px1))
+            ok = 0;
             ix1 = _ttoi(px1);
             GetDlgItemText(hDlg, IDC_EDIT2, py1, 30 - 1);
+            if (!isNum(py1))
+            ok = 0;
             iy1 = _ttoi(py1);
             GetDlgItemText(hDlg, IDC_EDIT3, px2, 30 - 1);
+            if (!isNum(px2))
+            ok = 0;
             ix2 = _ttoi(px2);
-            GetDlgItemText(hDlg, IDC_EDIT4, py2, 30 - 1);
-            iy2 = _ttoi(py2);
-            Figure* FF = new CCircle(CPoint(ix1, iy1), ix2);    
-            f.push_back(FF);
+         
+            if (ix2 > 0 and ok) {
+                Figure* FF = new CCircle(CPoint(ix1, iy1), ix2);
+                f.push_back(FF);
+            }
+            else {
+                ICheck = 0;
+                MessageBox(hDlg, L"Không tạo được hình tròn", L"Lỗi khởi tạo", MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
+            }
+
             EndDialog(hDlg, LOWORD(wParam));
             return (INT_PTR)TRUE;
         }
@@ -574,17 +655,35 @@ INT_PTR CALLBACK InputHinhEllipse(HWND hDlg, UINT message, WPARAM wParam, LPARAM
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
+            bool ok = 1;
             ICheck = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
+            if (!isNum(px1))
+            ok = 0;
             ix1 = _ttoi(px1);
             GetDlgItemText(hDlg, IDC_EDIT2, py1, 30 - 1);
+            if (!isNum(py1))
+            ok = 0;
             iy1 = _ttoi(py1);
             GetDlgItemText(hDlg, IDC_EDIT3, px2, 30 - 1);
+            if (!isNum(px2))
+            ok = 0;
             ix2 = _ttoi(px2);
             GetDlgItemText(hDlg, IDC_EDIT4, py2, 30 - 1);
+            if (!isNum(py2))
+            ok = 0;
             iy2 = _ttoi(py2);
-            Figure* FF = new CElipse(CPoint(ix1, iy1), ix2, iy2);
-            f.push_back(FF);
+            if (!isNum(py2))
+            ok = 0;
+            if (ix2 > 0 and iy2 > 0 and ok) {
+                Figure* FF = new CElipse(CPoint(ix1, iy1), ix2, iy2);
+                f.push_back(FF);
+            }
+            else {
+                ICheck = 0;
+                MessageBox(hDlg, L"Không tạo được ellipse", L"Lỗi khởi tạo", MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
+            }
+
             EndDialog(hDlg, LOWORD(wParam));
             return (INT_PTR)TRUE;
         }
@@ -604,25 +703,33 @@ INT_PTR CALLBACK InputHinhBanNguyet(HWND hDlg, UINT message, WPARAM wParam, LPAR
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
+            bool ok = 1;
             ICheck = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
+            if (!isNum(px1))
+            ok = 0;
             ix1 = _ttoi(px1);
             GetDlgItemText(hDlg, IDC_EDIT2, py1, 30 - 1);
+            if (!isNum(py1))
+            ok = 0;
             iy1 = _ttoi(py1);
             GetDlgItemText(hDlg, IDC_EDIT3, px2, 30 - 1);
+            if (!isNum(px2))
+            ok = 0;
             ix2 = _ttoi(px2);
-           //GetDlgItemText(hDlg, IDC_CHECK1, py2, 30 - 1);
             UINT u = IsDlgButtonChecked(hDlg, IDC_CHECK1);
             if (!u)
                 u = -1;
-           // u =  (CButton*)GetDlgItem(hDlg, IDC_CHECK1);
-            OutputDebugString(py1);
-            OutputDebugString(py2);
-           
             iy2 = _ttoi(py2);
-            Figure* FF = new CSemiCirlce(CPoint(ix1, iy1), ix2, u);
-            f.push_back(FF);
-
+            
+            if (ix2 > 0 and ok) {
+                Figure* FF = new CSemiCirlce(CPoint(ix1, iy1), ix2, u);
+                f.push_back(FF);
+            }
+            else {
+                ICheck = 0;
+                MessageBox(hDlg, L"Không tạo được hình bán nguyệt", L"Lỗi khởi tạo", MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
+            }
             EndDialog(hDlg, LOWORD(wParam));
             return (INT_PTR)TRUE;
         }
@@ -647,7 +754,7 @@ INT_PTR CALLBACK InputHinhPolygon (HWND hDlg, UINT message, WPARAM wParam, LPARA
             wstring test(&poly[0]);
             string s(test.begin(), test.end());
             //FILE* stream;
-            //freopen_s(&stream, "QQ.txt", "w", stdout);
+            //freopen_s(&stream, "check.txt", "w", stdout);
             //freopen("RR.txt", "w", stdout);
             s = '#' + s + '#';
             int digit = 0;
