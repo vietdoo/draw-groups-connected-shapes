@@ -31,7 +31,7 @@ TCHAR px1[30], py1[30], px2[30], py2[30], px3[30], py3[30], poly[222];
 int ix1 = 0, iy1 = 0, ix2 = 0, iy2 = 0, iy3, ix3;
 bool ICheck = 1;
 // 
-vector <Figure *> f;
+vector <Geometry *> f;
 
 
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -366,7 +366,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             for (int i = 0; i < 3; i++) {
                 ss += num[index + i];
             }
-
             string res = to_string(i) + ":  " + ss;
             TCHAR* tmp = new TCHAR[res.length()];
             tmp[res.size()] = 0;
@@ -378,7 +377,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             RECT r = { dwWidth - 150, i * limitHeight, dwWidth, i * limitHeight + limitHeight };
             DrawText(hdc, L"Nhóm ", 8, &rleft, (DT_LEFT) | (DT_SINGLELINE));
             DrawText(hdc, tmp, res.length(), &r, (DT_LEFT) | (DT_SINGLELINE));
-
         }
 
         //
@@ -394,18 +392,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
 
         for (int i = 0; i < group.size(); i++) {
-
             CPoint P = f[group[i][0]]->getCentroid();
             int x = P.getX();
             int y = P.getY();
             std::string res = std::to_string(i);
             TCHAR* tmp = new TCHAR[res.length()];
-            // tmp[res.size()] = 0;
             copy(res.begin(), res.end(), tmp);
             RECT r = { x,  y, x + 100, y + 15 };
-            //DrawText()
             DrawText(hdc, tmp, res.length(), &r, (DT_LEFT) | (DT_SINGLELINE));
-            //  DrawText(hdc, L"3", 30, &r, (DT_LEFT) | (DT_BOTTOM));
         }
 
         EndPaint(hWnd, &ps);
@@ -473,7 +467,7 @@ INT_PTR CALLBACK InputHinhVuong(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                 ok = 0;
             iy2 = _ttoi(py2);
             if (ok and ix1 < ix2 and iy1 < iy2 and abs(ix1 - ix2) == abs(iy1 - iy2)) {
-                Figure* FF = new CRectangle(CPoint(ix1, iy1), CPoint(ix2, iy2));
+                Geometry* FF = new CRectangle(CPoint(ix1, iy1), CPoint(ix2, iy2));
                 f.push_back(FF);
             }
             else {
@@ -523,7 +517,7 @@ INT_PTR CALLBACK InputHinhChuNhat(HWND hDlg, UINT message, WPARAM wParam, LPARAM
             iy2 = _ttoi(py2);
 
             if (ok and ix1 < ix2 and iy1 < iy2) {
-                Figure* FF = new CRectangle(CPoint(ix1, iy1), CPoint(ix2, iy2));
+                Geometry* FF = new CRectangle(CPoint(ix1, iy1), CPoint(ix2, iy2));
                 f.push_back(FF);
                
             }
@@ -586,7 +580,7 @@ INT_PTR CALLBACK InputHinhTamGiac(HWND hDlg, UINT message, WPARAM wParam, LPARAM
             dis[2] = Distant(V[2], V[0]);
             std::sort(dis, dis + 3);
             if (dis[2] != dis[1] + dis[0]) {
-                Figure* FF = new CTriangle(V);
+                Geometry* FF = new CTriangle(V);
                 f.push_back(FF);
             }
             else {
@@ -628,7 +622,7 @@ INT_PTR CALLBACK InputHinhTron(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
             ix2 = _ttoi(px2);
          
             if (ix2 > 0 and ok) {
-                Figure* FF = new CCircle(CPoint(ix1, iy1), ix2);
+                Geometry* FF = new CCircle(CPoint(ix1, iy1), ix2);
                 f.push_back(FF);
             }
             else {
@@ -676,7 +670,7 @@ INT_PTR CALLBACK InputHinhEllipse(HWND hDlg, UINT message, WPARAM wParam, LPARAM
             if (!isNum(py2))
             ok = 0;
             if (ix2 > 0 and iy2 > 0 and ok) {
-                Figure* FF = new CElipse(CPoint(ix1, iy1), ix2, iy2);
+                Geometry* FF = new CElipse(CPoint(ix1, iy1), ix2, iy2);
                 f.push_back(FF);
             }
             else {
@@ -723,7 +717,7 @@ INT_PTR CALLBACK InputHinhBanNguyet(HWND hDlg, UINT message, WPARAM wParam, LPAR
             iy2 = _ttoi(py2);
             
             if (ix2 > 0 and ok) {
-                Figure* FF = new CSemiCirlce(CPoint(ix1, iy1), ix2, u);
+                Geometry* FF = new CSemiCirlce(CPoint(ix1, iy1), ix2, u);
                 f.push_back(FF);
             }
             else {
@@ -774,7 +768,7 @@ INT_PTR CALLBACK InputHinhPolygon (HWND hDlg, UINT message, WPARAM wParam, LPARA
                 V.push_back(CPoint(d[i * 2], d[i * 2 + 1]));
             }
             if (V.size() >= 3 and isConvex(V)) {
-                Figure* FF = new CPolygon(V);
+                Geometry* FF = new CPolygon(V);
                 f.push_back(FF);
             }
             else {

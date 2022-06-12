@@ -72,8 +72,8 @@ public:
 
 
 
-// Figure
-class Figure
+// Geometry
+class Geometry
 {
 protected:
 	vector<LinearEquationIn2Var> VLinearEqua;
@@ -84,12 +84,11 @@ public:
 	virtual bool IsInside(CPoint) = 0;
 	virtual void draw(HDC hdc) = 0;
 	virtual void fill(HDC hdc, int R, int G, int B) = 0;
-
 	friend set<int> checkBelong();
 };
 
 // CElipse
-class CElipse : public Figure
+class CElipse : public Geometry
 {
 protected:
 	int Ra, Rb;
@@ -133,7 +132,7 @@ public:
 
 
 //CPolygon
-class CPolygon : public Figure
+class CPolygon : public Geometry
 {
 protected:
 	vector<CPoint> VCPoint;
