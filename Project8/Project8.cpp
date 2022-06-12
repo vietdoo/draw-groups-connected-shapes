@@ -38,7 +38,6 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
-// MY VIETDOO FUNC:
 void addMenu(HWND hWnd);
 set<int> checkBelong();
 bool isNum(TCHAR p[]);

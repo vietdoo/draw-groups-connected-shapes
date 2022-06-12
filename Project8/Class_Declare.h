@@ -18,7 +18,6 @@ using namespace std;
 using namespace z3;
 
 /*	Class declare	*/
-
 // CPoint
 class CPoint
 {

@@ -57,6 +57,15 @@
     <Image Include="bitmap2.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="C:\Users\qrwea\OneDrive\Pictures\Linh tinh\BoardingPass_MyNameOnMars2020.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="tuan.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="viet.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="image2.bin">

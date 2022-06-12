@@ -1,1 +1,64 @@
-﻿  Project8.vcxproj -> T:\DrawGroupsOfConnectedShapes\x64\Debug\Project8.exe
+﻿  Method_Definition.cpp
+T:\DrawGroupsOfConnectedShapes\Project8\Method_Definition.cpp(233,17): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Method_Definition.cpp(335,22): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Method_Definition.cpp(382,15): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Method_Definition.cpp(442,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Method_Definition.cpp(455,41): warning C4267: 'argument': conversion from 'size_t' to 'INT', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Method_Definition.cpp(466,54): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Method_Definition.cpp(473,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Method_Definition.cpp(481,12): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Method_Definition.cpp(509,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Method_Definition.cpp(515,13): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Method_Definition.cpp(522,23): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Project8.cpp
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(7,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(63,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(141,21): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(206,21): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(208,21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(222,21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(224,9): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(338,25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(378,77): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(401,77): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\xstring(2584,23): warning C4244: 'argument': conversion from 'wchar_t' to 'const _Elem', possible loss of data
+          with
+          [
+              _Elem=char
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\xstring(2595): message : see reference to function template instantiation 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<wchar_t*>(_Iter,const _Iter,std::input_iterator_tag)' being compiled
+          with
+          [
+              _Iter=wchar_t *
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\xstring(2595): message : see reference to function template instantiation 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<wchar_t*>(_Iter,const _Iter,std::input_iterator_tag)' being compiled
+          with
+          [
+              _Iter=wchar_t *
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\xstring(2575): message : see reference to function template instantiation 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<wchar_t*>(const _Iter,const _Iter,std::forward_iterator_tag)' being compiled
+          with
+          [
+              _Iter=wchar_t *
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\xstring(2575): message : see reference to function template instantiation 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<wchar_t*>(const _Iter,const _Iter,std::forward_iterator_tag)' being compiled
+          with
+          [
+              _Iter=wchar_t *
+          ]
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(255): message : see reference to function template instantiation 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)' being compiled
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
+              _Alloc=std::allocator<char>
+          ]
+T:\DrawGroupsOfConnectedShapes\Project8\Project8.cpp(255): message : see reference to function template instantiation 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)' being compiled
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
+              _Alloc=std::allocator<char>
+          ]
+  Generating Code...
+  Project8.vcxproj -> T:\DrawGroupsOfConnectedShapes\x64\Debug\Project8.exe

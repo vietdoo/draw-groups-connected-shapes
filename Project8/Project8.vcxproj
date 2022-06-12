@@ -159,8 +159,11 @@
   <ItemGroup>
     <Image Include="bitmap1.bmp" />
     <Image Include="bitmap2.bmp" />
+    <Image Include="C:\Users\qrwea\OneDrive\Pictures\Linh tinh\BoardingPass_MyNameOnMars2020.png" />
     <Image Include="Project8.ico" />
     <Image Include="small.ico" />
+    <Image Include="tuan.bmp" />
+    <Image Include="viet.bmp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="image2.bin" />
