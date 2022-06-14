@@ -32,7 +32,8 @@ Notes:
 
 #undef min
 #undef max
-
+#pragma warning ( default : 6001 )
+#pragma warning ( disable : 6011 )
 /**
    \defgroup cppapi C++ API
 

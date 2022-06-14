@@ -1,0 +1,6 @@
+
+Inside 1
+
+Inside 3
+CONNECT: 0 1 2 3 4 5 6 
+CURRENT GROUP SIZE: 1

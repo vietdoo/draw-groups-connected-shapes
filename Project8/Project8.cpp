@@ -1,38 +1,16 @@
-﻿// FormF2.cpp : Defines the entry point for the application.
-//
-
-#include "Class_Declare.h"
-#include "framework.h"
-#include "Project8.h"
-#include "z3++.h";
-#include <iostream>
-#include <algorithm>
-#include <string>
-#include <set>
-#include <time.h> 
-#include <objidl.h>
-#include <gdiplus.h>
-using namespace Gdiplus;
-#pragma comment (lib,"Gdiplus.lib")
-
-const INT MAXSHAPE = 100;
-using namespace std;
-using namespace z3;
-
-#define MAX_LOADSTRING 100
+﻿#include "Project8.h"
 
 // Global Variables:
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING] = L"Draw Groups Of Connected Shapes App";        
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
-//
-// GLOBA:
-TCHAR px1[30], py1[30], px2[30], py2[30], px3[30], py3[30], poly[222];
-int ix1 = 0, iy1 = 0, ix2 = 0, iy2 = 0, iy3, ix3;
+TCHAR px1[MAX_STRING], py1[MAX_STRING], px2[MAX_STRING], py2[MAX_STRING], px3[MAX_STRING], py3[MAX_STRING], poly[222];
+HMENU hMenu;
+vector <vector<int>> group;
+int colorR[MAXSHAPE] = { 0 }, colorG[MAXSHAPE] = { 0 }, colorB[MAXSHAPE] = { 0 };
+int ix1 = 0, iy1 = 0, ix2 = 0, iy2 = 0, iy3 = 0, ix3 = 0;
 bool ICheck = 1;
-// 
 vector <Geometry *> f;
-
 
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -61,27 +39,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
     srand(time(NULL));
-    // TODO: Place code here.
-    //Gan text cho WCHAR
-    // 
     FILE* stream;
-    freopen_s(&stream, "QQ_Input_Log.txt", "w", stdout);
-    cout << "USER INPUT LOG\n\n";
+    freopen_s(&stream, "UserInputLog.txt", "w", stdout);
+    cout << "-- USER INPUT LOG --\n\n";
     fclose(stdout);
-
-    // LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_PROJECT8, szWindowClass, MAX_LOADSTRING);
-    //Tao thong tin cho hInstance
     MyRegisterClass(hInstance);
-
-    // Chay cai nay la run cua so moi
     if (!InitInstance(hInstance, nCmdShow))
     {
         return FALSE;
     }
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_PROJECT8));
     MSG msg;
-    // Main message loop:
     while (GetMessage(&msg, nullptr, 0, 0))
     {
         if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -94,7 +63,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     return (int)msg.wParam;
 }
 
-//  PURPOSE: Registers the window class.
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -131,11 +99,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     UpdateWindow(hWnd);
     return TRUE;
 }
-
-
-HMENU hMenu;
-vector <vector<int>> group;
-int colorR[MAXSHAPE] = { 0 }, colorG[MAXSHAPE] = { 0 }, colorB[MAXSHAPE] = { 0 };
 
 set<int> checkBelong() {
     int n = f.size();
@@ -218,7 +181,7 @@ void groupShape(set <int> belong) {
         colorB[n - 1] = B;
     }
 
-    else {
+    else if (f.size() > m) {
         m = f.size();
         vector <int> sGroup;
         for (int i = group.size() - 1; i >= 0; i--) {
@@ -250,7 +213,7 @@ void groupShape(set <int> belong) {
 void debugLog();
 void debugLog() {
     FILE* stream;
-    freopen_s(&stream, "QQ_Input_Log.txt", "a", stdout);
+    freopen_s(&stream, "UserInputLog.txt", "a", stdout);
     wstring test(&poly[0]);
     string s(test.begin(), test.end());
     cout << ix1 << ' ' << iy1 << ' ' << ix2 << ' ' << iy2 << ' ' << ix3 << ' ' << iy3 << ' ' << s << '\n';
@@ -322,31 +285,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     break;
     case WM_PAINT:
     {
-      
         hdc = BeginPaint(hWnd, &ps);
-
-        debugLog();
-
-
         if (!f.size()) {
             EndPaint(hWnd, &ps);
             return 0;
         }
+        debugLog();
         SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
         FILE* stream;
-        freopen_s(&stream, "QQlogs.txt", "w", stdout);
+        freopen_s(&stream, "CurrentProcessingLog.txt", "w", stdout);
         int n = f.size();
         set <int> belong = checkBelong();
-
-        cout << "BELONG: ";
+        cout << "CONNECT: ";
         for (auto i : belong) {
             cout << i << ' ';
         }
         groupShape(belong);
-        cout << "\nGROUP SIZE: " << group.size();
-
-
-
+        cout << "\nCURRENT GROUP SIZE: " << group.size();
         vector <float> groupArea;
         float sum = 0;
         for (int i = 0; i < group.size(); i++) {
@@ -377,10 +332,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             DrawText(hdc, L"Nhóm ", 8, &rleft, (DT_LEFT) | (DT_SINGLELINE));
             DrawText(hdc, tmp, res.length(), &r, (DT_LEFT) | (DT_SINGLELINE));
         }
-
-        //
         cout << endl;
-
         fclose(stdout);
 
         for (int i = 0; i < f.size(); i++) {
@@ -400,7 +352,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             RECT r = { x,  y, x + 100, y + 15 };
             DrawText(hdc, tmp, res.length(), &r, (DT_LEFT) | (DT_SINGLELINE));
         }
-
         EndPaint(hWnd, &ps);
     }
     break;
@@ -435,7 +386,6 @@ bool isNum(TCHAR p[]) {
     return 1;
 }
 
-// Message handler for about box.
 INT_PTR CALLBACK InputHinhVuong(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(lParam);
@@ -447,6 +397,7 @@ INT_PTR CALLBACK InputHinhVuong(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
+            ix1 = 0; iy1 = 0; ix2 = 0; iy2 = 0; ix3 = 0; iy3 = 0;
             bool ok = 1;
             ICheck = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
@@ -493,6 +444,7 @@ INT_PTR CALLBACK InputHinhChuNhat(HWND hDlg, UINT message, WPARAM wParam, LPARAM
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
+            ix1 = 0; iy1 = 0; ix2 = 0; iy2 = 0; ix3 = 0; iy3 = 0;
             ICheck = 1;
             bool ok = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
@@ -544,6 +496,7 @@ INT_PTR CALLBACK InputHinhTamGiac(HWND hDlg, UINT message, WPARAM wParam, LPARAM
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
+            ix1 = 0; iy1 = 0; ix2 = 0; iy2 = 0; ix3 = 0; iy3 = 0;
             ICheck = 1;
             bool ok = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
@@ -605,6 +558,7 @@ INT_PTR CALLBACK InputHinhTron(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
+            ix1 = 0; iy1 = 0; ix2 = 0; iy2 = 0; ix3 = 0; iy3 = 0;
             bool ok = 1;
             ICheck = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
@@ -648,6 +602,7 @@ INT_PTR CALLBACK InputHinhEllipse(HWND hDlg, UINT message, WPARAM wParam, LPARAM
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
+            ix1 = 0; iy1 = 0; ix2 = 0; iy2 = 0; ix3 = 0; iy3 = 0;
             bool ok = 1;
             ICheck = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
@@ -696,6 +651,7 @@ INT_PTR CALLBACK InputHinhBanNguyet(HWND hDlg, UINT message, WPARAM wParam, LPAR
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
+            ix1 = 0; iy1 = 0; ix2 = 0; iy2 = 0; ix3 = 0; iy3 = 0;
             bool ok = 1;
             ICheck = 1;
             GetDlgItemText(hDlg, IDC_EDIT1, px1, 30 - 1);
@@ -742,13 +698,11 @@ INT_PTR CALLBACK InputHinhPolygon (HWND hDlg, UINT message, WPARAM wParam, LPARA
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
+            ix1 = 0; iy1 = 0; ix2 = 0; iy2 = 0; ix3 = 0; iy3 = 0;
             ICheck = 1;
-            GetDlgItemText(hDlg, IDC_EDIT3, poly , MAXSHAPE - 1);
+            GetDlgItemText(hDlg, IDC_EDIT3, poly , 222 - 1);
             wstring test(&poly[0]);
             string s(test.begin(), test.end());
-            //FILE* stream;
-            //freopen_s(&stream, "check.txt", "w", stdout);
-            //freopen("RR.txt", "w", stdout);
             s = '#' + s + '#';
             int digit = 0;
             vector <int> d;
@@ -807,8 +761,6 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 void addMenu(HWND hWnd) {
     hMenu = CreateMenu();
     HMENU menuCon = CreateMenu();
-
-
     AppendMenu(hMenu, MF_POPUP, (UINT_PTR)menuCon, L"Chọn hình");
     AppendMenu(menuCon, MF_STRING, 220, L"Hình Vuông");
     AppendMenu(menuCon, MF_STRING, 221, L"Hình Chữ Nhật");

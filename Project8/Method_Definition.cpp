@@ -257,7 +257,7 @@ void CCircle::setCCircle(CPoint center, int r, int lim)
 	// Quadratic form : A*(x - a)^2  + B*(y - b)^2 = R
 	// Circle form: (x - a)^2 + (y - b)^2 = R^2
 
-	VQuadraEqua.resize(0);
+	VQuadraEqua.clear();
 	QuadraticEquationIn2Var Equation;
 	Equation.A = 1;		Equation.a = Center.getX();		limit = lim;	// <Circle limit = 0> / <semiCCircle limit = 1 or -1>
 	Equation.B = 1;		Equation.b = Center.getY();		Equation.R = Ra * Ra;
@@ -351,12 +351,12 @@ void CRectangle::setCRectangle(CPoint LUpper, CPoint RLower) {
 	VCPoint.push_back(CPoint({ LUpper.getX(), RLower.getY() }));
 
 	// Calc 4 line equation 
-	VLinearEqua.resize(4);
+	VLinearEqua.clear();
 	for (int i = 0; i < 4; i++) {
 		if (i == 3)
-			VLinearEqua[i].setLinearEquationIn2Var(VCPoint.at(3), (VCPoint.at(0)));
+			VLinearEqua.push_back(LinearEquationIn2Var(VCPoint[3], (VCPoint[0])));
 		else
-			VLinearEqua[i].setLinearEquationIn2Var(VCPoint.at(i), (VCPoint.at(i + 1)));
+			VLinearEqua.push_back(LinearEquationIn2Var(VCPoint[i], (VCPoint[i + 1])));
 	}
 }
 
