@@ -1,3 +1,0 @@
-CONNECT: 0 1 2 
-Merge groups: 1 To Group << 0
-CURRENT GROUP SIZE: 1

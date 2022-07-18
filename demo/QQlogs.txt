@@ -1,2 +1,0 @@
-BELONG: 
-GROUP SIZE: 1
