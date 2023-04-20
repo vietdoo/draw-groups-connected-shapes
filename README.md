@@ -23,6 +23,4 @@ Build with VS 2017 or higher version.
 
 ![](tutorial/images/demo.gif)
 
-
-![Tên hình ảnh](./public/demo.jpg)
-
+Please refer to the [reported file](docs/Reported.pdf) for details on the algorithm used in the program.
